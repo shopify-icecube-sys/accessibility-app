@@ -1,0 +1,411 @@
+/* ACCESSBIILITY WIDGET CORE */
+:root {
+  --acc-primary: #3b5998;
+  --acc-secondary: #f0f2f5;
+  --acc-text: #333;
+  --acc-border: #ccd0d5;
+  --acc-active: #4a90e2;
+  --acc-gold: #ffb700;
+}
+
+.accessibility-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--acc-primary);
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000000;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.accessibility-widget:hover {
+  transform: scale(1.1);
+}
+
+.accessibility-widget svg {
+  width: 30px;
+  height: 30px;
+}
+
+/* POPUP BOX */
+.accessibility-popup {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 360px;
+  max-width: 90vw;
+  height: 500px;
+  max-height: 80vh;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  display: none;
+  flex-direction: column;
+  z-index: 1000000;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid var(--acc-primary);
+}
+
+/* HEADER */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background: var(--acc-primary);
+  color: white;
+  align-items: center;
+}
+
+.popup-header span {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#close-popup {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 0;
+  line-height: 1;
+}
+
+/* SUB HEADER BUTTONS */
+.popup-sub-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+
+.sub-header-btn {
+  padding: 12px;
+  background: #fff;
+  border: none;
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.sub-header-btn:last-child {
+  border-right: none;
+}
+
+/* BODY */
+.popup-body {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.widget-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* FEATURE BUTTON */
+.feature-btn {
+  background: #fff;
+  border: 2px solid var(--acc-primary);
+  border-radius: 8px;
+  padding: 15px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  min-height: 100px;
+}
+
+.feature-btn:hover {
+  background: var(--acc-secondary);
+}
+
+.feature-btn.active {
+  border-color: var(--acc-active);
+  background: #f0f7ff;
+}
+
+.feature-btn svg {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.feature-btn span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+}
+
+/* CHECKMARK */
+.active-check {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: var(--acc-primary);
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.feature-btn.active .active-check {
+  display: flex;
+}
+
+/* PROGRESS BAR */
+.progress-container {
+  width: 80%;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  margin-top: 10px;
+  overflow: hidden;
+  display: flex;
+}
+
+.progress-segment {
+  flex: 1;
+  height: 100%;
+  border-right: 1px solid #fff;
+}
+
+.progress-segment:last-child {
+  border-right: none;
+}
+
+.feature-btn.active .progress-segment.filled {
+  background: var(--acc-primary);
+}
+
+/* THEME CLASSES & COMBINED FILTER ENGINE */
+html.acc-inverted { --acc-c-f: invert(100%) hue-rotate(180deg); }
+html.acc-high-contrast { --acc-c-f: contrast(200%) brightness(110%); }
+html.acc-low-contrast { --acc-c-f: contrast(60%) brightness(120%); }
+
+html.acc-low-saturation { --acc-s-f: saturate(50%); }
+html.acc-high-saturation { --acc-s-f: saturate(200%); }
+html.acc-grayscale { --acc-s-f: grayscale(100%); }
+
+html.acc-filtering {
+  filter: var(--acc-c-f, brightness(1)) var(--acc-s-f, brightness(1)) !important;
+}
+
+html.acc-inverted img, 
+html.acc-inverted video, 
+html.acc-inverted iframe,
+html.acc-inverted .accessibility-widget,
+html.acc-inverted .accessibility-popup {
+  filter: invert(100%) hue-rotate(180deg) !important;
+}
+
+/* High Contrast UI Overrides if needed */
+html.acc-high-contrast body {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+html.acc-high-contrast a {
+  color: var(--acc-gold) !important;
+  text-decoration: underline !important;
+}
+
+/* HIGHLIGHT LINKS */
+html.acc-highlight-links a,
+html.acc-highlight-links a * {
+  background-color: #000 !important;
+  color: #ffb700 !important;
+  text-decoration: underline !important;
+  text-decoration-color: #ffb700 !important;
+}
+
+/* Ensure the widget statement links don't break too badly if they exist, though it's mostly text */
+html.acc-highlight-links .accessibility-popup a {
+  background-color: transparent !important;
+  color: var(--acc-primary) !important;
+}
+
+/* HIDE IMAGES */
+html.acc-hide-images img,
+html.acc-hide-images svg:not(.accessibility-widget *, .accessibility-popup *),
+html.acc-hide-images video,
+html.acc-hide-images [style*="background-image"] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Ensure the widget icon itself remains visible */
+html.acc-hide-images .accessibility-widget img,
+html.acc-hide-images .accessibility-widget svg {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* LETTER SPACING CLASSES */
+html.acc-letter-spacing-1 body, html.acc-letter-spacing-1 p, html.acc-letter-spacing-1 a, html.acc-letter-spacing-1 h1, html.acc-letter-spacing-1 h2, html.acc-letter-spacing-1 h3, html.acc-letter-spacing-1 h4, html.acc-letter-spacing-1 h5, html.acc-letter-spacing-1 h6, html.acc-letter-spacing-1 span, html.acc-letter-spacing-1 div, html.acc-letter-spacing-1 li, html.acc-letter-spacing-1 label, html.acc-letter-spacing-1 button, html.acc-letter-spacing-1 td, html.acc-letter-spacing-1 th {
+  letter-spacing: 0.08em !important;
+}
+html.acc-letter-spacing-2 body, html.acc-letter-spacing-2 p, html.acc-letter-spacing-2 a, html.acc-letter-spacing-2 h1, html.acc-letter-spacing-2 h2, html.acc-letter-spacing-2 h3, html.acc-letter-spacing-2 h4, html.acc-letter-spacing-2 h5, html.acc-letter-spacing-2 h6, html.acc-letter-spacing-2 span, html.acc-letter-spacing-2 div, html.acc-letter-spacing-2 li, html.acc-letter-spacing-2 label, html.acc-letter-spacing-2 button, html.acc-letter-spacing-2 td, html.acc-letter-spacing-2 th {
+  letter-spacing: 0.16em !important;
+}
+html.acc-letter-spacing-3 body, html.acc-letter-spacing-3 p, html.acc-letter-spacing-3 a, html.acc-letter-spacing-3 h1, html.acc-letter-spacing-3 h2, html.acc-letter-spacing-3 h3, html.acc-letter-spacing-3 h4, html.acc-letter-spacing-3 h5, html.acc-letter-spacing-3 h6, html.acc-letter-spacing-3 span, html.acc-letter-spacing-3 div, html.acc-letter-spacing-3 li, html.acc-letter-spacing-3 label, html.acc-letter-spacing-3 button, html.acc-letter-spacing-3 td, html.acc-letter-spacing-3 th {
+  letter-spacing: 0.24em !important;
+}
+html.acc-letter-spacing-4 body, html.acc-letter-spacing-4 p, html.acc-letter-spacing-4 a, html.acc-letter-spacing-4 h1, html.acc-letter-spacing-4 h2, html.acc-letter-spacing-4 h3, html.acc-letter-spacing-4 h4, html.acc-letter-spacing-4 h5, html.acc-letter-spacing-4 h6, html.acc-letter-spacing-4 span, html.acc-letter-spacing-4 div, html.acc-letter-spacing-4 li, html.acc-letter-spacing-4 label, html.acc-letter-spacing-4 button, html.acc-letter-spacing-4 td, html.acc-letter-spacing-4 th {
+  letter-spacing: 0.32em !important;
+}
+
+/* Keep widget and icons text normal */
+html[class*="acc-letter-spacing-"] .accessibility-widget,
+html[class*="acc-letter-spacing-"] .accessibility-widget *,
+html[class*="acc-letter-spacing-"] .accessibility-popup,
+html[class*="acc-letter-spacing-"] .accessibility-popup *,
+html[class*="acc-letter-spacing-"] i,
+html[class*="acc-letter-spacing-"] svg,
+html[class*="acc-letter-spacing-"] [class*="icon"] {
+  letter-spacing: normal !important;
+}
+
+/* TEXT ALIGN CLASSES */
+/* TEXT ALIGN CLASSES */
+/* SMART CONTENT ALIGNMENT (Safe and broadly applicable) */
+html.acc-text-align-left body { --horizontal-alignment: flex-start !important; --text-align: left !important; }
+html.acc-text-align-center body { --horizontal-alignment: center !important; --text-align: center !important; }
+html.acc-text-align-right body { --horizontal-alignment: flex-end !important; --text-align: right !important; }
+
+html.acc-text-align-left body :is(p, h1, h2, h3, h4, h5, h6, span, a, div, li, label, section, .text-block):not(.accessibility-widget *):not(.accessibility-popup *) {
+  text-align: left !important;
+}
+html.acc-text-align-center body :is(p, h1, h2, h3, h4, h5, h6, span, a, div, li, label, section, .text-block):not(.accessibility-widget *):not(.accessibility-popup *) {
+  text-align: center !important;
+}
+html.acc-text-align-right body :is(p, h1, h2, h3, h4, h5, h6, span, a, div, li, label, section, .text-block):not(.accessibility-widget *):not(.accessibility-popup *) {
+  text-align: right !important;
+}
+html.acc-text-align-justify body, html.acc-text-align-justify p, html.acc-text-align-justify a, html.acc-text-align-justify h1, html.acc-text-align-justify h2, html.acc-text-align-justify h3, html.acc-text-align-justify h4, html.acc-text-align-justify h5, html.acc-text-align-justify h6, html.acc-text-align-justify span, html.acc-text-align-justify div, html.acc-text-align-justify li, html.acc-text-align-justify label, html.acc-text-align-justify button, html.acc-text-align-justify td, html.acc-text-align-justify th {
+  text-align: justify !important;
+}
+
+/* Keep widget text alignment normal */
+html[class*="acc-text-align-"] .accessibility-widget,
+html[class*="acc-text-align-"] .accessibility-widget *,
+html[class*="acc-text-align-"] .accessibility-popup,
+html[class*="acc-text-align-"] .accessibility-popup * {
+  text-align: left !important;
+}
+html[class*="acc-text-align-"] .accessibility-popup .feature-btn,
+html[class*="acc-text-align-"] .accessibility-popup .feature-btn * {
+  text-align: center !important;
+}
+
+/* Specific Header & Menu Item Alignment Overrides (Dawn, Ride, Sense & common themes) */
+html.acc-text-align-left .header, html.acc-text-align-left .header__heading, html.acc-text-align-left .header-logo, html.acc-text-align-left .header__inline-menu, html.acc-text-align-left .header-menu, html.acc-text-align-left .list-menu--inline, html.acc-text-align-left .menu-list, html.acc-text-align-left .header__columns {
+  display: flex !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+html.acc-text-align-center .header, html.acc-text-align-center .header__heading, html.acc-text-align-center .header-logo, html.acc-text-align-center .header__inline-menu, html.acc-text-align-center .header-menu, html.acc-text-align-center .list-menu--inline, html.acc-text-align-center .menu-list, html.acc-text-align-center .header__columns {
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+html.acc-text-align-right .header, html.acc-text-align-right .header__heading, html.acc-text-align-right .header-logo, html.acc-text-align-right .header__inline-menu, html.acc-text-align-right .header-menu, html.acc-text-align-right .list-menu--inline, html.acc-text-align-right .menu-list, html.acc-text-align-right .header__columns {
+  display: flex !important;
+  justify-content: flex-end !important;
+  text-align: right !important;
+}
+
+/* Shopify Theme Structural Alignments (Flex Overrides for banners, rich text, headers, hero contents) */
+/* Broad Structural Fix for Flex and Grid Alignment */
+html.acc-text-align-left body :is(.hero__content-wrapper, .group-block-content, .footer-utilities, .collection-hero__content, .facets__wrapper, .card__content, .product-grid-container, .product-card__content, .card__information, .card__information-group, .resource-list__header, .collection-card, .collection-card__content) {
+  --horizontal-alignment: flex-start !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  margin-right: auto !important;
+  margin-left: 0 !important;
+  text-align: left !important;
+}
+html.acc-text-align-center body :is(.hero__content-wrapper, .group-block-content, .footer-utilities, .collection-hero__content, .facets__wrapper, .card__content, .product-card__content, .card__information, .card__information-group, .resource-list__header, .collection-card, .collection-card__content) {
+  --horizontal-alignment: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+html.acc-text-align-right body :is(.hero__content-wrapper, .group-block-content, .footer-utilities, .collection-hero__content, .facets__wrapper, .card__content, .product-grid-container, .product-card__content, .card__information, .card__information-group, .resource-list__header, .collection-card, .collection-card__content) {
+  --horizontal-alignment: flex-end !important;
+  justify-content: flex-end !important;
+  align-items: flex-end !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  text-align: right !important;
+}
+
+/* Force block-level containers and titles to respect text-alignment */
+html.acc-text-align-center :is(.card-information, .card__heading, .collection-hero__text-wrapper, .full-unstyled-link, .product-card__title, .card__information, .card-information__text, .card__information-group, .card__content, .collection-list__item, .collection-card__content, .text-block) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  --width: 100% !important; /* Fixing the fit-content issue */
+  text-align: center !important;
+}
+html.acc-text-align-center .text-block p {
+  text-align: center !important;
+  width: 100% !important;
+}
+html.acc-text-align-center .full-unstyled-link {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+html.acc-text-align-left :is(.card-information, .card__heading, .collection-hero__text-wrapper, .full-unstyled-link, .product-card__title, .card__information, .card-information__text, .card__information-group) {
+  text-align: left !important;
+}
+html.acc-text-align-right :is(.card-information, .card__heading, .collection-hero__text-wrapper, .full-unstyled-link, .product-card__title, .card__information, .card-information__text, .card__information-group) {
+  text-align: right !important;
+}
+
+/* Title Wrappers (Products Header, Collections Header) */
+html.acc-text-align-left .title-wrapper-with-link {
+  justify-content: flex-start !important;
+}
+html.acc-text-align-center .title-wrapper-with-link {
+  justify-content: center !important;
+}
+html.acc-text-align-right .title-wrapper-with-link {
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important;
+}
+
+/* Base styles for widget text alignments to prevent external overrides */
+.accessibility-popup {
+  text-align: left !important;
+}
+.feature-btn {
+  text-align: center !important;
+}

@@ -1,0 +1,15 @@
+{% schema %}
+{
+  "name": "Accessibility Widget",
+  "target": "body",
+  "settings": []
+}
+{% endschema %}
+
+<link rel="stylesheet" href="{{ 'widget-style.css' | asset_url }}">
+
+<script>
+  window.ACCESSIBILITY_ICON = "{{ 'accessibility.png' | asset_url }}";
+</script>
+
+<script src="{{ 'widget.js' | asset_url }}" defer></script>
