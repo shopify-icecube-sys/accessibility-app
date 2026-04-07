@@ -99,9 +99,39 @@ html.acc-low-saturation { filter: saturate(40%) !important; }
 html.acc-high-saturation { filter: saturate(200%) !important; }
 html.acc-grayscale { filter: grayscale(100%) !important; }
 
+/* 6. VISUAL ACCESSIBILITY FEATURES */
+
+/* Readable Fonts */
+html.acc-readable-fonts body, 
+html.acc-readable-fonts body *:not(#accessibility-app-vault *) { 
+    font-family: Arial, sans-serif !important;
+}
+
+/* Stop Animations */
+html.acc-stop-animation body, 
+html.acc-stop-animation body *:not(#accessibility-app-vault *) { 
+    animation: none !important; 
+    transition: none !important; 
+}
+
+/* Text Enhancer */
+html.acc-text-enhancer body, 
+html.acc-text-enhancer body *:not(#accessibility-app-vault *) { 
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
+}
+
+/* 7. BIG CURSOR */
+html.acc-big-cursor body, 
+html.acc-big-cursor body *:not(#accessibility-app-vault *) { 
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cpath d='M0 0 L40 30 L20 30 L20 55 Z' fill='black' stroke='white' stroke-width='2'/%3E%3C/svg%3E") 0 0, auto !important;
+}
+
 /* VAULT PROTECTION */
-#accessibility-app-vault * {
+#accessibility-app-vault, #accessibility-app-vault * {
     all: initial;
     box-sizing: border-box;
     font-family: inherit;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
 }
