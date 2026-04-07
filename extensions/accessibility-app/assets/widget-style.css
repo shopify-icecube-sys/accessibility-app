@@ -5,7 +5,7 @@
 
 :root {
   --acc-primary: #3b5998;
-  --acc-gold: #ffb700;
+  --acc-gold: #ff0000;
 }
 
 /* 1. IRONCLAD MEDIA BLACKOUT */
@@ -40,15 +40,11 @@ html.acc-font-size-4 :is(body, p, h1, h2, h3, h4, h5, h6, li, dt, dd, td, th, ca
 
 /* 4. TRUE LINK HIGHLIGHTING (Beating intense Theme Specificities) */
 html.acc-highlight-links body a,
-html.acc-highlight-links body a *,
 html.acc-highlight-links body button,
-html.acc-highlight-links body button *,
 html.acc-highlight-links body input[type="submit"],
 html.acc-highlight-links body input[type="button"],
 html.acc-highlight-links body .link,
-html.acc-highlight-links body .link *,
 html.acc-highlight-links body [role="link"],
-html.acc-highlight-links body [role="link"] *,
 html.acc-highlight-links body [class*="card"] h1,
 html.acc-highlight-links body [class*="card"] h2,
 html.acc-highlight-links body [class*="card"] h3,
@@ -57,13 +53,25 @@ html.acc-highlight-links body [class*="card"] h5,
 html.acc-highlight-links body [class*="card"] h6,
 html.acc-highlight-links body [class*="card"] span,
 html.acc-highlight-links body [class*="title"],
-html.acc-highlight-links body [class*="title"] *,
-html.acc-highlight-links body [class*="heading"],
-html.acc-highlight-links body [class*="heading"] * {
+html.acc-highlight-links body [class*="heading"] {
     color: var(--acc-gold) !important;
+    background-color: #ffff00 !important;
     text-decoration: underline !important;
     background-image: none !important;
     -webkit-text-fill-color: var(--acc-gold) !important;
+    padding: 0 4px !important;
+}
+
+/* Force all text content within links to be yellow */
+html.acc-highlight-links body a *:not(img):not(svg):not(path),
+html.acc-highlight-links body button *:not(img):not(svg):not(path),
+html.acc-highlight-links body .link *:not(img):not(svg):not(path),
+html.acc-highlight-links body [role="link"] *:not(img):not(svg):not(path),
+html.acc-highlight-links body [class*="title"] *:not(img):not(svg):not(path),
+html.acc-highlight-links body [class*="heading"] *:not(img):not(svg):not(path) {
+    color: var(--acc-gold) !important;
+    -webkit-text-fill-color: var(--acc-gold) !important;
+    background-color: transparent !important;
 }
 
 /* Protect Icons and Images inside targeted elements from breaking */

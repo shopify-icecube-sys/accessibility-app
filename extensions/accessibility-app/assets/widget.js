@@ -10,17 +10,19 @@
     highlightLinks: localStorage.getItem('acc-highlightLinks') === 'true',
     hideImages: localStorage.getItem('acc-hideImages') === 'true',
     saturation: parseInt(localStorage.getItem('acc-saturation') || '0'),
+    adhd: localStorage.getItem('acc-adhd') === 'true',
+    cognitive: localStorage.getItem('acc-cognitive') === 'true',
     lang: localStorage.getItem('acc-lang') || 'en',
     showStatement: false
   };
 
   const i18n = {
-    en: { title: "Accessibility Settings", reset: "Reset All", selectLang: "Select a Language", statement: "Statement", hideStatement: "Close", fontSize: "Size", hideImages: "Media", highlightLinks: "Links", textAlign: "Align", contrast: "Contrast", sat: "Saturation", c0: "Contrast", c1: "Inverted", c2: "Low Con", c3: "High Con", s0: "Saturation", s1: "Low Sat", s2: "High Sat", s3: "Grayscale", a0: "Align", a1: "Left", a2: "Center", a3: "Right", a4: "Justify", st: "Native Shopify extension built with Liquid, CSS3, and JS. Includes Surgical Scaling, Universal Alignment, Media Blackout, and Contrast Control." },
-    de: { title: "Barrierefreiheit", reset: "Zurücksetzen", selectLang: "Sprache", statement: "Aussage", hideStatement: "Schließen", fontSize: "Größe", hideImages: "Multimedia", highlightLinks: "Markierung", textAlign: "Zeilen", contrast: "Kontrast", sat: "Farben", c0: "Kontrast", c1: "Invertiert", c2: "Niedrig", c3: "Hoch", s0: "Farben", s1: "Blass", s2: "Stark", s3: "Grau", a0: "Zeilen", a1: "Links", a2: "Mitte", a3: "Rechts", a4: "Blocksatz", st: "Extension für Shopify mit Liquid & JS. Funktionen: Textzoom, Layout-Ausrichtung, Medien-Hide, Link-Hervorhebung und Kontrast." },
-    es: { title: "Accesibilidad", reset: "Reiniciar", selectLang: "Idioma", statement: "Declaración", hideStatement: "Cerrar", fontSize: "Tamaño", hideImages: "Multimedia", highlightLinks: "Enlaces", textAlign: "Alinear", contrast: "Contraste", sat: "Saturación", c0: "Contraste", c1: "Invertido", c2: "Bajo", c3: "Alto", s0: "Saturación", s1: "Baja", s2: "Alta", s3: "Gris", a0: "Alinear", a1: "Izquierda", a2: "Centro", a3: "Derecha", a4: "Justificado", st: "Accesibilidad nativa. Incluye: Contraste, escalado de fuente, alineación universal, resaltado de enlaces y ocultación multimedia." },
-    fr: { title: "Accessibilité", reset: "Réinitialiser", selectLang: "Langue", statement: "Déclaration", hideStatement: "Fermer", fontSize: "Taille", hideImages: "Médias", highlightLinks: "Repères", textAlign: "Aligner", contrast: "Contraste", sat: "Intensité", c0: "Contraste", c1: "Inversé", c2: "Bas", c3: "Haut", s0: "Intensité", s1: "Basse", s2: "Haute", s3: "Gris", a0: "Aligner", a1: "Gauche", a2: "Centre", a3: "Droite", a4: "Justifié", st: "Extension native Shopify. Caractéristiques : Zoom, Alignement global, Masquage médias, Repères et Contraste." },
-    it: { title: "Accessibilità", reset: "Ripristina", selectLang: "Lingua", statement: "Dichiarazione", hideStatement: "Chiudi", fontSize: "Carattere", hideImages: "Multimedia", highlightLinks: "Evidenzia", textAlign: "Allinea", contrast: "Contrasto", sat: "Colori", c0: "Contrasto", c1: "Invertito", c2: "Basso", c3: "Alto", s0: "Colori", s1: "Bassa", s2: "Alta", s3: "Grigio", a0: "Allinea", a1: "Sinistra", a2: "Centro", a3: "Destra", a4: "Giustifica", st: "Migliora la navigazione tramite Liquid, CSS3 e JS. Funzioni: Zoom carattere, Allineamento universale, Multimedia hide e Contrasto." },
-    pt: { title: "Acessibilidade", reset: "Recomeçar", selectLang: "Idioma", statement: "Declaração", hideStatement: "Fechar", fontSize: "Fonte", hideImages: "Multimídia", highlightLinks: "Destaque", textAlign: "Alinhamento", contrast: "Contraste", sat: "Saturação", c0: "Contraste", c1: "Invertido", c2: "Baixo", c3: "Alto", s0: "Saturação", s1: "Baixa", s2: "Alta", s3: "Cinza", a0: "Alinhamento", a1: "Esquerda", a2: "Centro", a3: "Direita", a4: "Justificado", st: "Acessibilidade Shopify. Inclui: Modos de contraste, zoom cirúrgico, alinhamento universal, realce de links e ocultação de mídia." }
+    en: { title: "Accessibility Settings", reset: "Reset All", selectLang: "Select a Language", statement: "Statement", hideStatement: "Close", fontSize: "Size", hideImages: "Media", highlightLinks: "Links", textAlign: "Align", contrast: "Contrast", sat: "Saturation", adhd: "ADHD Profile", profiles: "Profile Settings", cognitive: "Cognitive Profile", c0: "Contrast", c1: "Inverted", c2: "Low Con", c3: "High Con", s0: "Saturation", s1: "Low Sat", s2: "High Sat", s3: "Grayscale", a0: "Align", a1: "Left", a2: "Center", a3: "Right", a4: "Justify", st: "Native Shopify extension built with Liquid, CSS3, and JS. Includes Surgical Scaling, Universal Alignment, Media Blackout, and Contrast Control." },
+    de: { title: "Barrierefreiheit", reset: "Zurücksetzen", selectLang: "Sprache", statement: "Aussage", hideStatement: "Schließen", fontSize: "Größe", hideImages: "Multimedia", highlightLinks: "Markierung", textAlign: "Zeilen", contrast: "Kontrast", sat: "Farben", adhd: "ADHS Profil", profiles: "Profileinstellungen", cognitive: "Kognitives Profil", c0: "Kontrast", c1: "Invertiert", c2: "Niedrig", c3: "Hoch", s0: "Farben", s1: "Blass", s2: "Stark", s3: "Grau", a0: "Zeilen", a1: "Links", a2: "Mitte", a3: "Rechts", a4: "Blocksatz", st: "Extension für Shopify mit Liquid & JS. Funktionen: Textzoom, Layout-Ausrichtung, Medien-Hide, Link-Hervorhebung und Kontrast." },
+    es: { title: "Accesibilidad", reset: "Reiniciar", selectLang: "Idioma", statement: "Declaración", hideStatement: "Cerrar", fontSize: "Tamaño", hideImages: "Multimedia", highlightLinks: "Enlaces", textAlign: "Alinear", contrast: "Contraste", sat: "Saturación", adhd: "Perfil TDAH", profiles: "Ajustes de Perfil", cognitive: "Perfil Cognitivo", c0: "Contraste", c1: "Invertido", c2: "Bajo", c3: "Alto", s0: "Saturación", s1: "Baja", s2: "Alta", s3: "Gris", a0: "Alinear", a1: "Izquierda", a2: "Centro", a3: "Derecha", a4: "Justificado", st: "Accesibilidad nativa. Incluye: Contraste, escalado de fonte, alineación universal, resaltado de enlaces y ocultación multimedia." },
+    fr: { title: "Accessibilité", reset: "Réinitialiser", selectLang: "Langue", statement: "Déclaration", hideStatement: "Fermer", fontSize: "Taille", hideImages: "Médias", highlightLinks: "Repères", textAlign: "Aligner", contrast: "Contraste", sat: "Intensité", adhd: "Profil TDAH", profiles: "Paramètres de Profil", cognitive: "Profil Cognitif", c0: "Contraste", c1: "Inversé", c2: "Bas", c3: "Haut", s0: "Intensité", s1: "Basse", s2: "Haute", s3: "Gris", a0: "Aligner", a1: "Gauche", a2: "Centre", a3: "Droite", a4: "Justifié", st: "Extension native Shopify. Caractéristiques : Zoom, Alignement global, Masquage médias, Repères et Contraste." },
+    it: { title: "Accessibilità", reset: "Ripristina", selectLang: "Lingua", statement: "Dichiarazione", hideStatement: "Chiudi", fontSize: "Carattere", hideImages: "Multimedia", highlightLinks: "Evidenzia", textAlign: "Allinea", contrast: "Contrasto", sat: "Colori", adhd: "Profilo ADHD", profiles: "Impostazioni Profilo", cognitive: "Profilo Cognitivo", c0: "Contrasto", c1: "Invertito", c2: "Basso", c3: "Alto", s0: "Colori", s1: "Bassa", s2: "Alta", s3: "Grigio", a0: "Allinea", a1: "Sinistra", a2: "Centro", a3: "Destra", a4: "Giustifica", st: "Migliora la navigazione tramite Liquid, CSS3 e JS. Funzioni: Zoom carattere, Allineamento universale, Multimedia hide e Contrasto." },
+    pt: { title: "Acessibilidade", reset: "Recomeçar", selectLang: "Idioma", statement: "Declaração", hideStatement: "Fechar", fontSize: "Fonte", hideImages: "Multimídia", highlightLinks: "Destaque", textAlign: "Alinhamento", contrast: "Contrast", sat: "Saturação", adhd: "Perfil TDAH", profiles: "Ajustes de Perfil", cognitive: "Perfil Cognitivo", c0: "Contraste", c1: "Invertido", c2: "Baixo", c3: "Alto", s0: "Saturação", s1: "Baja", s2: "Alta", s3: "Cinza", a0: "Alinhamento", a1: "Esquerda", a2: "Centro", a3: "Direita", a4: "Justificado", st: "Acessibilidade Shopify. Inclui: Modos de contraste, zoom cirúrgico, alinhamento universal, realce de links e ocultación de mídia." }
   };
 
   const t = (k) => i18n[state.lang]?.[k] || i18n['en'][k] || k;
@@ -58,6 +60,16 @@
     select { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 14px; outline: none; }
     .s-box h4 { margin-top: 0; color: var(--primary); }
     .s-box p { line-height: 1.5; color: #333; font-size: 14px; }
+    .section-title { font-size: 14px; font-weight: 800; color: var(--primary); margin: 20px 0 12px 0; border-bottom: 2px solid #eee; padding-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; }
+    .section-title::after { content: ""; flex: 1; height: 1px; background: #eee; margin-left: 10px; }
+    #adhd-mask { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2147483646; display: none; }
+    .adhd-bar { position: absolute; left: 0; width: 100%; height: 140px; background: transparent; box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); transform: translateY(-50%); border-top: 3px solid var(--primary); border-bottom: 3px solid var(--primary); }
+    
+    #cognitive-view { position: fixed; background: rgba(0,0,0,0.92) !important; color: #fff !important; padding: 20px 30px; border-radius: 12px; font-size: 22px; font-weight: 500; z-index: 2147483647; display: none; pointer-events: none; text-align: left; box-shadow: 0 15px 45px rgba(0,0,0,0.6); max-width: 500px; line-height: 1.5; border: 1.5px solid #555; }
+
+    /* Cognitive Profile: Highlight interactive and structural elements */
+    .acc-cognitive h1, .acc-cognitive h2, .acc-cognitive h3, .acc-cognitive h4, .acc-cognitive h5, .acc-cognitive h6 { outline: 3px solid #5e427a !important; outline-offset: 4px !important; }
+    .acc-cognitive a, .acc-cognitive button, .acc-cognitive input, .acc-cognitive select, .acc-cognitive textarea { outline: 3px solid #5e427a !important; outline-offset: 2px !important; }
   `;
 
   shadow.innerHTML = `
@@ -80,6 +92,8 @@
       </div>
       <div class="p-body" id="p-body"></div>
     </div>
+    <div id="adhd-mask"><div class="adhd-bar" id="adhd-bar"></div></div>
+    <div id="cognitive-view"></div>
   `;
 
   const render = () => {
@@ -93,6 +107,12 @@
       return;
     }
     b.innerHTML = `
+      <div class="section-title">${t('profiles')}</div>
+      <div class="grid">
+        <div class="feat-btn ${state.adhd ? 'active' : ''}" data-ax="adhd"><div class="active-check">✓</div><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line></svg><span>${t('adhd')}</span></div>
+        <div class="feat-btn ${state.cognitive ? 'active' : ''}" data-ax="cognitive"><div class="active-check">✓</div><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 10c0 5.52 4.48 10 10 10s10-4.48 10-10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"></path><path d="M12 6a4 4 0 0 0-4 4 1 1 0 0 0 2 0 2 2 0 0 1 4 0 1 1 0 0 0 2 0 4 4 0 0 0-4-4z"></path><path d="M12 14a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-1-1z"></path></svg><span>${t('cognitive')}</span></div>
+      </div>
+      <div class="section-title">${t('title')}</div>
       <div class="grid">
         <div class="feat-btn ${state.contrast > 0 ? 'active' : ''}" data-ax="contrast"><div class="active-check">✓</div><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20c5.523 0 10-4.477 10-10S17.523 2 12 2z" fill="currentColor"></path></svg><span>${t('c'+state.contrast)}</span><div class="prog">${[1,2,3].map(i => `<div class="prog-seg ${state.contrast >= i ? 'filled' : ''}"></div>`).join('')}</div></div>
         <div class="feat-btn ${state.fontSize > 0 ? 'active' : ''}" data-ax="fontSize"><div class="active-check">✓</div><svg viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"></path></svg><span>${t('fontSize')} +${state.fontSize * 25}%</span><div class="prog">${[1,2,3,4].map(i => `<div class="prog-seg ${state.fontSize >= i ? 'filled' : ''}"></div>`).join('')}</div></div>
@@ -110,6 +130,8 @@
         if (ax === 'highlightLinks') state.highlightLinks = !state.highlightLinks;
         if (ax === 'hideImages') state.hideImages = !state.hideImages;
         if (ax === 'saturation') state.saturation = (state.saturation + 1) % 4;
+        if (ax === 'adhd') state.adhd = !state.adhd;
+        if (ax === 'cognitive') state.cognitive = !state.cognitive;
         apply();
       };
     });
@@ -124,6 +146,79 @@
     if (state.hideImages) h.classList.add('acc-hide-images');
     if (state.textAlign > 0) h.classList.add(`acc-text-align-${['','left','center','right','justify'][state.textAlign]}`);
     if (state.fontSize > 0) h.classList.add(`acc-font-size-${state.fontSize}`);
+    if (state.cognitive) h.classList.add('acc-cognitive');
+    
+    const mask = shadow.getElementById('adhd-mask');
+    const cogView = shadow.getElementById('cognitive-view');
+
+    if (state.adhd || state.cognitive) {
+      mask.style.display = 'block';
+      if (!window.accMouseMoveHandler) {
+        window.accMouseMoveHandler = (e) => {
+          const bar = shadow.getElementById('adhd-bar');
+          if (bar) bar.style.top = e.clientY + 'px';
+          
+          if (state.cognitive) {
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (el && el !== document.documentElement && el !== document.body && el !== vault && !vault.contains(el)) {
+              const textTags = ['P','SPAN','A','H1','H2','H3','H4','H5','H6','LI','BUTTON','B','I','TH','TD','LABEL','STRONG','EM','U','FONT','ARTICLE','SECTION'];
+              
+              // More lenient check for text blocks
+              const isDirectText = Array.from(el.childNodes).some(n => n.nodeType === 3 && n.textContent.trim().length > 2);
+              const isTextTag = textTags.includes(el.tagName);
+              
+              if (isTextTag || isDirectText) {
+                let text = (el.innerText || el.textContent || "").trim();
+                
+                if (text.length > 2) {
+                  text = text.replace(/\s+/g, ' ');
+                  cogView.innerText = text;
+                  cogView.style.display = 'block';
+                  
+                  // Position near mouse (increased offset to avoid overlap)
+                  let x = e.clientX + 30;
+                  let y = e.clientY + 30;
+                  
+                  // Boundary check
+                  const vWidth = window.innerWidth;
+                  const vHeight = window.innerHeight;
+                  const boxWidth = cogView.offsetWidth || 500;
+                  const boxHeight = cogView.offsetHeight;
+
+                  if (x + boxWidth > vWidth) x = e.clientX - boxWidth - 30;
+                  if (y + boxHeight > vHeight) y = vHeight - boxHeight - 30;
+                  if (y < 0) y = 30;
+
+                  cogView.style.left = Math.max(10, x) + 'px';
+                  cogView.style.top = Math.max(10, y) + 'px';
+                } else {
+                  cogView.style.display = 'none';
+                }
+              } else {
+                cogView.style.display = 'none';
+              }
+            } else {
+              cogView.style.display = 'none';
+            }
+          } else {
+            cogView.style.display = 'none';
+          }
+        };
+        document.addEventListener('mousemove', window.accMouseMoveHandler);
+      }
+    } else {
+      mask.style.display = 'none';
+      if (cogView) cogView.style.display = 'none';
+      if (window.accMouseMoveHandler) {
+        document.removeEventListener('mousemove', window.accMouseMoveHandler);
+        window.accMouseMoveHandler = null;
+      }
+      // Also clean up old handler name if it exists
+      if (window.adhdHandler) {
+        document.removeEventListener('mousemove', window.adhdHandler);
+        window.adhdHandler = null;
+      }
+    }
   };
 
   const apply = () => {
@@ -148,7 +243,7 @@
   shadow.getElementById('close-p').onclick = (e) => { e.stopPropagation(); p.style.display = 'none'; };
   shadow.getElementById('p-lang').onchange = (e) => { e.stopPropagation(); state.lang = e.target.value; apply(); };
   shadow.getElementById('p-reset').onclick = (e) => { e.stopPropagation(); 
-     Object.assign(state, {contrast:0,fontSize:0,textAlign:0,highlightLinks:false,hideImages:false,saturation:0,lang:'en'}); 
+     Object.assign(state, {contrast:0,fontSize:0,textAlign:0,highlightLinks:false,hideImages:false,saturation:0,adhd:false,cognitive:false,lang:'en'}); 
      shadow.getElementById('p-lang').value = 'en';
      apply(); 
   };
