@@ -42,9 +42,9 @@
   const styles = `
     * { box-sizing: border-box; }
     :host { --primary: #3b5998; --bg: #fff; --text: #333; --border: #ccd0d5; --active: #4a90e2; all: initial; }
-    .accessibility-widget { position: fixed; bottom: 20px; right: 20px; background: var(--primary) !important; color: #fff !important; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer !important; z-index: 2147483647 !important; box-shadow: 0 4px 15px rgba(0,0,0,0.3); visibility: visible !important; }
+    .accessibility-widget { position: fixed; bottom: 20px; left: 20px; background: var(--primary) !important; color: #fff !important; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer !important; z-index: 2147483647 !important; box-shadow: 0 4px 15px rgba(0,0,0,0.3); visibility: visible !important; }
     .accessibility-widget svg { width: 32px; height: 32px; fill: white !important; color: white !important; pointer-events: none; }
-    .accessibility-popup { position: fixed; bottom: 90px; right: 20px; width: 360px; max-width: 90vw; height: 530px; max-height: 85vh; background: #fff !important; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.25); display: none; flex-direction: column; z-index: 2147483647 !important; overflow: hidden; font-family: system-ui, sans-serif; border: 1px solid var(--primary); text-align: left; }
+    .accessibility-popup { position: fixed; bottom: 90px; left: 20px; width: 360px; max-width: 90vw; height: 530px; max-height: 85vh; background: #fff !important; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.25); display: none; flex-direction: column; z-index: 2147483647 !important; overflow: hidden; font-family: system-ui, sans-serif; border: 1px solid var(--primary); text-align: left; }
     .p-head { display: flex; justify-content: space-between; padding: 15px 20px; background: var(--primary); color: white !important; align-items: center; }
     .p-head span { font-size: 18px; font-weight: 600; color: white !important; }
     #close-p { background: none; border: none; color: white !important; cursor: pointer; font-size: 24px; padding: 0; }
@@ -72,7 +72,7 @@
     .s-box p { line-height: 1.5; color: #333; font-size: 14px; }
     .section-title { font-size: 14px; font-weight: 800; color: var(--primary); margin: 20px 0 12px 0; border-bottom: 2px solid #eee; padding-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; }
     .section-title::after { content: ""; flex: 1; height: 1px; background: #eee; margin-left: 10px; }
-    #adhd-mask { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2147483646; display: none; }
+    #adhd-mask { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2147483647; display: none; }
     .adhd-bar { position: absolute; left: 0; width: 100%; height: 140px; background: transparent; box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); transform: translateY(-50%); border-top: 3px solid var(--primary); border-bottom: 3px solid var(--primary); }
     
     #cognitive-view { position: fixed; background: rgba(0,0,0,0.92) !important; color: #fff !important; padding: 20px 30px; border-radius: 12px; font-size: 22px; font-weight: 500; z-index: 2147483647; display: none; pointer-events: none; text-align: left; box-shadow: 0 15px 45px rgba(0,0,0,0.6); max-width: 500px; line-height: 1.5; border: 1.5px solid #555; }
@@ -238,6 +238,189 @@ const removeTextAlignUniversal = () => {
   if (styleEl) styleEl.remove();
 };
 
+const bringVaultToFront = () => {
+  if (!document.body || !vault.isConnected) return;
+  if (document.body.lastElementChild !== vault) {
+    document.body.appendChild(vault);
+  }
+};
+
+const ACC_CART_DRAWER_ROOT_SELECTOR = [
+  'cart-drawer',
+  'cart-drawer-component',
+  '#CartDrawer',
+  '.cart-drawer',
+  '.drawer--cart',
+  '.mini-cart',
+  '.ajaxcart',
+  '.js-cart-drawer',
+  '[id*="CartDrawer"]',
+  '[class~="cart-drawer"]',
+  '[class*="cart-drawer-"]'
+].join(',');
+
+const ACC_CART_DRAWER_PANEL_SELECTOR = [
+  '.cart-drawer__inner',
+  '.drawer__inner',
+  '.cart-drawer-inner',
+  '.mini-cart__inner',
+  '.ajaxcart__inner',
+  '[class*="drawer__inner"]',
+  '[class*="cart-drawer__inner"]'
+].join(',');
+
+const ACC_DRAWER_MASK_CLASS = 'acc-drawer-mask';
+const ACC_DRAWER_BAR_CLASS = 'acc-drawer-mask-bar';
+const ACC_DRAWER_SHADE_TOP_CLASS = 'acc-drawer-mask-shade-top';
+const ACC_DRAWER_SHADE_BOTTOM_CLASS = 'acc-drawer-mask-shade-bottom';
+
+const isElementVisible = (el) => {
+  if (!(el instanceof HTMLElement)) return false;
+  const style = window.getComputedStyle(el);
+  if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) return false;
+  if (el.getAttribute('hidden') !== null) return false;
+  if (el.getAttribute('aria-hidden') === 'true') return false;
+  return el.getClientRects().length > 0;
+};
+
+const getCartDrawerTargets = () => {
+  const roots = Array.from(document.querySelectorAll(ACC_CART_DRAWER_ROOT_SELECTOR))
+    .filter((el) => el instanceof HTMLElement);
+  const targets = [];
+  const seen = new Set();
+
+  roots.forEach((root) => {
+    const panels = root.querySelectorAll(ACC_CART_DRAWER_PANEL_SELECTOR);
+    if (panels.length > 0) {
+      panels.forEach((panel) => {
+        if (!(panel instanceof HTMLElement)) return;
+        if (!seen.has(panel)) {
+          seen.add(panel);
+          targets.push(panel);
+        }
+      });
+      return;
+    }
+    if (!seen.has(root)) {
+      seen.add(root);
+      targets.push(root);
+    }
+  });
+
+  return targets;
+};
+
+const ensureDrawerMask = (drawerTarget) => {
+  if (!(drawerTarget instanceof HTMLElement)) return null;
+  let mask = drawerTarget.querySelector(`:scope > .${ACC_DRAWER_MASK_CLASS}`);
+  if (!mask) {
+    mask = document.createElement('div');
+    mask.className = ACC_DRAWER_MASK_CLASS;
+    mask.style.cssText = 'position: absolute !important; inset: 0 !important; pointer-events: none !important; z-index: 2147483647 !important; overflow: hidden !important; background: transparent !important;';
+    const topShade = document.createElement('div');
+    topShade.className = ACC_DRAWER_SHADE_TOP_CLASS;
+    topShade.style.cssText = 'position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; height: 0 !important;';
+    mask.appendChild(topShade);
+    const bar = document.createElement('div');
+    bar.className = ACC_DRAWER_BAR_CLASS;
+    bar.style.cssText = 'position: absolute !important; left: 0 !important; width: 100% !important; transform: translateY(-50%) !important; background: transparent !important;';
+    mask.appendChild(bar);
+    const bottomShade = document.createElement('div');
+    bottomShade.className = ACC_DRAWER_SHADE_BOTTOM_CLASS;
+    bottomShade.style.cssText = 'position: absolute !important; left: 0 !important; width: 100% !important; height: 0 !important;';
+    mask.appendChild(bottomShade);
+    drawerTarget.appendChild(mask);
+  }
+  const computed = window.getComputedStyle(drawerTarget);
+  if (computed.position === 'static') {
+    if (drawerTarget.dataset.accPrevPosition === undefined) drawerTarget.dataset.accPrevPosition = drawerTarget.style.position || '';
+    drawerTarget.style.setProperty('position', 'relative', 'important');
+  }
+  return mask;
+};
+
+const syncDrawerMaskAppearance = () => {
+  const sourceBar = shadow.getElementById('adhd-bar');
+  if (!(sourceBar instanceof HTMLElement)) return;
+  const cs = window.getComputedStyle(sourceBar);
+  const shadowMatch = (cs.boxShadow || '').match(/rgba?\([^)]+\)/);
+  const dimColor = shadowMatch ? shadowMatch[0] : 'rgba(0,0,0,0.6)';
+  const targets = getCartDrawerTargets();
+  targets.forEach((target) => {
+    if (!(target instanceof HTMLElement)) return;
+    const topShade = target.querySelector(`:scope > .${ACC_DRAWER_MASK_CLASS} > .${ACC_DRAWER_SHADE_TOP_CLASS}`);
+    const bar = target.querySelector(`:scope > .${ACC_DRAWER_MASK_CLASS} > .${ACC_DRAWER_BAR_CLASS}`);
+    const bottomShade = target.querySelector(`:scope > .${ACC_DRAWER_MASK_CLASS} > .${ACC_DRAWER_SHADE_BOTTOM_CLASS}`);
+    if (!(bar instanceof HTMLElement)) return;
+    if (topShade instanceof HTMLElement) topShade.style.background = dimColor;
+    if (bottomShade instanceof HTMLElement) bottomShade.style.background = dimColor;
+    bar.style.height = cs.height;
+    bar.style.background = 'transparent';
+    bar.style.borderTop = cs.borderTop;
+    bar.style.borderBottom = cs.borderBottom;
+  });
+};
+
+const clearDrawerMask = (drawerTarget) => {
+  if (!(drawerTarget instanceof HTMLElement)) return;
+  const mask = drawerTarget.querySelector(`:scope > .${ACC_DRAWER_MASK_CLASS}`);
+  if (mask) mask.remove();
+  if (drawerTarget.dataset.accPrevPosition !== undefined) {
+    const prev = drawerTarget.dataset.accPrevPosition;
+    if (prev) drawerTarget.style.position = prev;
+    else drawerTarget.style.removeProperty('position');
+    delete drawerTarget.dataset.accPrevPosition;
+  }
+};
+
+const syncCartDrawerMasks = () => {
+  const targets = getCartDrawerTargets();
+  targets.forEach((target) => {
+    if (state.readingMask && isElementVisible(target)) ensureDrawerMask(target);
+    else clearDrawerMask(target);
+  });
+  syncDrawerMaskAppearance();
+};
+
+const scheduleSyncCartDrawerMasks = () => {
+  if (window.__accDrawerMaskSyncTimer) return;
+  window.__accDrawerMaskSyncTimer = requestAnimationFrame(() => {
+    window.__accDrawerMaskSyncTimer = null;
+    syncCartDrawerMasks();
+  });
+};
+
+const updateDrawerMaskBars = (clientY) => {
+  const targets = getCartDrawerTargets();
+  targets.forEach((target) => {
+    if (!(target instanceof HTMLElement)) return;
+    const topShade = target.querySelector(`:scope > .${ACC_DRAWER_MASK_CLASS} > .${ACC_DRAWER_SHADE_TOP_CLASS}`);
+    const bar = target.querySelector(`:scope > .${ACC_DRAWER_MASK_CLASS} > .${ACC_DRAWER_BAR_CLASS}`);
+    const bottomShade = target.querySelector(`:scope > .${ACC_DRAWER_MASK_CLASS} > .${ACC_DRAWER_SHADE_BOTTOM_CLASS}`);
+    if (!(bar instanceof HTMLElement)) return;
+    const rect = target.getBoundingClientRect();
+    const localY = Math.max(0, Math.min(rect.height, clientY - rect.top));
+    const bandHeight = bar.offsetHeight || 140;
+    const half = bandHeight / 2;
+    const topCut = Math.max(0, Math.min(rect.height, localY - half));
+    const bottomStart = Math.max(0, Math.min(rect.height, localY + half));
+    bar.style.top = `${localY}px`;
+    if (topShade instanceof HTMLElement) topShade.style.height = `${topCut}px`;
+    if (bottomShade instanceof HTMLElement) {
+      bottomShade.style.top = `${bottomStart}px`;
+      bottomShade.style.height = `${Math.max(0, rect.height - bottomStart)}px`;
+    }
+  });
+};
+
+const scheduleBringVaultToFront = () => {
+  if (window.__accVaultFrontTimer) return;
+  window.__accVaultFrontTimer = requestAnimationFrame(() => {
+    window.__accVaultFrontTimer = null;
+    bringVaultToFront();
+  });
+};
+
 const applyTextAlignUniversal = (value) => {
   removeTextAlignUniversal();
   const textBlockPlacement = value === 'center'
@@ -284,6 +467,8 @@ const applyTextAlignUniversal = (value) => {
 };
 
   const applyParams = () => {
+    bringVaultToFront();
+    syncCartDrawerMasks();
     const h = document.documentElement;
     h.classList.remove(...ACC_MANAGED_CLASSES);
     if (state.contrast > 0) h.classList.add(['','acc-inverted','acc-low-contrast','acc-high-contrast'][state.contrast]);
@@ -321,8 +506,10 @@ const applyTextAlignUniversal = (value) => {
       if (!window.accMouseMoveHandler) {
         window.accMouseMoveHandler = (e) => {
           if (state.readingMask) {
+            scheduleSyncCartDrawerMasks();
             const bar = shadow.getElementById('adhd-bar');
             if (bar) bar.style.top = e.clientY + 'px';
+            updateDrawerMaskBars(e.clientY);
           }
           
           if (state.cognitive) {
@@ -375,6 +562,7 @@ const applyTextAlignUniversal = (value) => {
       }
     } else {
       mask.style.display = 'none';
+      syncCartDrawerMasks();
       if (cogView) cogView.style.display = 'none';
       if (window.accMouseMoveHandler) {
         document.removeEventListener('mousemove', window.accMouseMoveHandler);
@@ -447,6 +635,12 @@ const applyTextAlignUniversal = (value) => {
   });
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
+  const bodyObserver = new MutationObserver(() => {
+    scheduleSyncCartDrawerMasks();
+    scheduleBringVaultToFront();
+  });
+  bodyObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style', 'open', 'aria-hidden', 'hidden'] });
+
   const p = shadow.getElementById('main-popup');
   shadow.getElementById('main-trigger').onclick = (e) => { e.stopPropagation(); p.style.display = p.style.display === 'flex' ? 'none' : 'flex'; };
   shadow.getElementById('close-p').onclick = (e) => { e.stopPropagation(); p.style.display = 'none'; };
@@ -458,6 +652,8 @@ const applyTextAlignUniversal = (value) => {
   };
   shadow.getElementById('p-stmt').onclick = (e) => { e.stopPropagation(); state.showStatement = !state.showStatement; render(); };
   document.addEventListener('click', (e) => { if(!e.composedPath().includes(vault)) p.style.display = 'none'; });
+  document.addEventListener('transitionstart', scheduleBringVaultToFront, true);
+  document.addEventListener('animationstart', scheduleBringVaultToFront, true);
   
   applyParams();
   apply();
