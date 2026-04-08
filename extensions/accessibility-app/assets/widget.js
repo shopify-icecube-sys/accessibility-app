@@ -211,14 +211,94 @@
     });
   };
 
+const ACC_TA_STYLE_ID = 'acc-text-align-runtime-style';
+const ACC_DEBUG_KEY = 'acc-debug';
+const ACC_MANAGED_CLASSES = [
+  'acc-inverted', 'acc-low-contrast', 'acc-high-contrast',
+  'acc-low-saturation', 'acc-high-saturation', 'acc-grayscale',
+  'acc-highlight-links', 'acc-hide-images',
+  'acc-text-align', 'acc-text-align-left', 'acc-text-align-center', 'acc-text-align-right', 'acc-text-align-justify',
+  'acc-font-size-1', 'acc-font-size-2', 'acc-font-size-3', 'acc-font-size-4',
+  'acc-cognitive', 'acc-visually-impaired', 'acc-big-cursor', 'acc-readable-fonts', 'acc-text-enhancer', 'acc-stop-animation'
+];
+const ACC_TEXT_ELEMENTS_SELECTOR = ':is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,th,td,caption,small,strong,em,b,i,blockquote,figcaption,legend,summary,dt,dd,time,[class*="title"],[class*="heading"],[class*="caption"],[class*="description"],[class*="content"],[class*="text"],[class*="price"])';
+const ACC_TEXT_VARIABLE_SELECTOR = ':is([style*="--text-align"],[class*="text-block"],[class*="rte"])';
+const ACC_ALIGN_CLASS_SELECTOR = ':is([class*="align-left"],[class*="align-center"],[class*="align-right"],[class*="align-justify"])';
+const ACC_FIT_CONTENT_SELECTOR = ':is(.text-block,.rte,.collection-card__content .text-block,.collection-card__content .rte,[class*="collection_title"],[class*="heading"],[class*="title"])';
+const ACC_MEDIA_GUARD = ':not(img):not(picture):not(svg):not(video):not(canvas):not([class*="image"]):not([class*="media"])';
+
+const isDebugEnabled = () => localStorage.getItem(ACC_DEBUG_KEY) === 'true' || window.__ACC_DEBUG__ === true;
+const debugLog = (...args) => {
+  if (!isDebugEnabled()) return;
+  console.log('[ACC DEBUG]', ...args);
+};
+
+const removeTextAlignUniversal = () => {
+  const styleEl = document.getElementById(ACC_TA_STYLE_ID);
+  if (styleEl) styleEl.remove();
+};
+
+const applyTextAlignUniversal = (value) => {
+  removeTextAlignUniversal();
+  const textBlockPlacement = value === 'center'
+    ? 'margin-left: auto !important; margin-right: auto !important;'
+    : (value === 'right'
+      ? 'margin-left: auto !important; margin-right: 0 !important;'
+      : 'margin-left: 0 !important; margin-right: auto !important;');
+  const styleEl = document.createElement('style');
+  styleEl.id = ACC_TA_STYLE_ID;
+  styleEl.textContent = `
+    html.acc-text-align {
+      --acc-text-align: ${value};
+    }
+
+    /* Universal text alignment layer */
+    html.acc-text-align body ${ACC_TEXT_ELEMENTS_SELECTOR}${ACC_MEDIA_GUARD} {
+      text-align: var(--acc-text-align) !important;
+    }
+
+    /* Theme variable-driven systems: only text variable, no layout vars */
+    html.acc-text-align body ${ACC_TEXT_VARIABLE_SELECTOR}${ACC_MEDIA_GUARD} {
+      --text-align: var(--acc-text-align) !important;
+      text-align: var(--acc-text-align) !important;
+    }
+
+    /* Alignment utility class overrides */
+    html.acc-text-align body ${ACC_ALIGN_CLASS_SELECTOR} {
+      text-align: var(--acc-text-align) !important;
+    }
+
+    /* Fit-content text wrappers need positional nudging */
+    html.acc-text-align body ${ACC_FIT_CONTENT_SELECTOR}:not([class*="image"]):not([class*="media"]) {
+      ${textBlockPlacement}
+      text-align: var(--acc-text-align) !important;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    html.acc-text-align body :is(.collection-card__content p, .collection-card__content span, .collection-card__content a) {
+      text-align: var(--acc-text-align) !important;
+    }
+  `;
+  document.head.appendChild(styleEl);
+};
+
   const applyParams = () => {
     const h = document.documentElement;
-    h.className = h.className.replace(/\bacc-\S+/g, '').trim();
+    h.classList.remove(...ACC_MANAGED_CLASSES);
     if (state.contrast > 0) h.classList.add(['','acc-inverted','acc-low-contrast','acc-high-contrast'][state.contrast]);
     if (state.saturation > 0) h.classList.add(['','acc-low-saturation','acc-high-saturation','acc-grayscale'][state.saturation]);
     if (state.highlightLinks) h.classList.add('acc-highlight-links');
     if (state.hideImages) h.classList.add('acc-hide-images');
-    if (state.textAlign > 0) h.classList.add(`acc-text-align-${['','left','center','right','justify'][state.textAlign]}`);
+    else h.classList.remove('acc-hide-images');
+    const alignClassMap = ['', 'acc-text-align-left', 'acc-text-align-center', 'acc-text-align-right', 'acc-text-align-justify'];
+    if (state.textAlign > 0) {
+      h.classList.add('acc-text-align');
+      h.classList.add(alignClassMap[state.textAlign]);
+      applyTextAlignUniversal(['left', 'center', 'right', 'justify'][state.textAlign - 1]);
+    } else {
+      removeTextAlignUniversal();
+    }
     if (state.fontSize > 0) h.classList.add(`acc-font-size-${state.fontSize}`);
     if (state.cognitive) h.classList.add('acc-cognitive');
     if (state.visuallyImpaired) h.classList.add('acc-visually-impaired');
@@ -226,6 +306,11 @@
     if (state.readableFonts) h.classList.add('acc-readable-fonts');
     if (state.textEnhancer) h.classList.add('acc-text-enhancer');
     if (state.stopAnimation) h.classList.add('acc-stop-animation');
+    debugLog('applyParams', {
+      textAlign: state.textAlign,
+      hideImages: state.hideImages,
+      activeClasses: ACC_MANAGED_CLASSES.filter((cls) => h.classList.contains(cls))
+    });
     
     const mask = shadow.getElementById('adhd-mask');
     const cogView = shadow.getElementById('cognitive-view');
@@ -309,6 +394,41 @@
     render();
   };
 
+  window.AccessibilityWidgetDebug = {
+    enable() { localStorage.setItem(ACC_DEBUG_KEY, 'true'); window.__ACC_DEBUG__ = true; debugLog('debug enabled'); },
+    disable() { localStorage.setItem(ACC_DEBUG_KEY, 'false'); window.__ACC_DEBUG__ = false; console.log('[ACC DEBUG] disabled'); },
+    getState() { return { ...state }; },
+    reapply() { applyParams(); }
+  };
+
+  const scheduleApplyParams = () => {
+    clearTimeout(window.__accReapplyTimer);
+    window.__accReapplyTimer = setTimeout(() => {
+      applyParams();
+    }, 80);
+  };
+
+  if (!window.__accNavPatched) {
+    const rawPushState = history.pushState;
+    const rawReplaceState = history.replaceState;
+    history.pushState = function (...args) {
+      const result = rawPushState.apply(this, args);
+      scheduleApplyParams();
+      return result;
+    };
+    history.replaceState = function (...args) {
+      const result = rawReplaceState.apply(this, args);
+      scheduleApplyParams();
+      return result;
+    };
+    window.__accNavPatched = true;
+  }
+  window.addEventListener('popstate', scheduleApplyParams);
+  window.addEventListener('pageshow', scheduleApplyParams);
+  document.addEventListener('shopify:section:load', scheduleApplyParams);
+  document.addEventListener('shopify:section:reorder', scheduleApplyParams);
+  document.addEventListener('shopify:section:select', scheduleApplyParams);
+
   // Keep observing HTML class to ensure Shopify Themes don't remove our classes dynamically (e.g., during page navigations)
   const observer = new MutationObserver(() => {
      let missing = false;
@@ -316,6 +436,8 @@
      if (state.hideImages && !document.documentElement.classList.contains('acc-hide-images')) missing = true;
      if (state.contrast > 0 && !document.documentElement.className.includes('contrast') && !document.documentElement.className.includes('inverted')) missing = true;
      if (state.saturation > 0 && !document.documentElement.className.includes('saturation') && !document.documentElement.className.includes('grayscale')) missing = true;
+    if (state.textAlign > 0 && !document.documentElement.classList.contains('acc-text-align')) missing = true;
+    if (state.textAlign > 0 && !document.getElementById(ACC_TA_STYLE_ID)) missing = true;
      if (state.visuallyImpaired && !document.documentElement.classList.contains('acc-visually-impaired')) missing = true;
      if (state.bigCursor && !document.documentElement.classList.contains('acc-big-cursor')) missing = true;
      if (state.readableFonts && !document.documentElement.classList.contains('acc-readable-fonts')) missing = true;

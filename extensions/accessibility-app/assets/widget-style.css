@@ -31,6 +31,22 @@ html.acc-text-align-left body,
 html.acc-text-align-left body *:not(script):not(style):not(#accessibility-app-vault *) { text-align: left !important; }
 html.acc-text-align-right body,
 html.acc-text-align-right body *:not(script):not(style):not(#accessibility-app-vault *) { text-align: right !important; }
+html.acc-text-align-justify body,
+html.acc-text-align-justify body *:not(script):not(style):not(#accessibility-app-vault *) { text-align: justify !important; }
+
+/* Collection list page specific hard-targets without layout changes */
+html.acc-text-align-left body :is(.collection-list .card__heading, .collection-list .card__information, .list-collections__item, .collection-hero__title, [class*="collection"] [class*="title"], [class*="collection"] [class*="heading"]) {
+    text-align: left !important;
+}
+html.acc-text-align-center body :is(.collection-list .card__heading, .collection-list .card__information, .list-collections__item, .collection-hero__title, [class*="collection"] [class*="title"], [class*="collection"] [class*="heading"]) {
+    text-align: center !important;
+}
+html.acc-text-align-right body :is(.collection-list .card__heading, .collection-list .card__information, .list-collections__item, .collection-hero__title, [class*="collection"] [class*="title"], [class*="collection"] [class*="heading"]) {
+    text-align: right !important;
+}
+html.acc-text-align-justify body :is(.collection-list .card__heading, .collection-list .card__information, .list-collections__item, .collection-hero__title, [class*="collection"] [class*="title"], [class*="collection"] [class*="heading"]) {
+    text-align: justify !important;
+}
       
 /* 3. SURGICAL FONT ZOOM */
 html.acc-font-size-1 :is(body, p, h1, h2, h3, h4, h5, h6, li, dt, dd, td, th, caption, label, div.rte, .product__description):not(#accessibility-app-vault *) { font-size: 1.25em !important; line-height: 1.5 !important; }
