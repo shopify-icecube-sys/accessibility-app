@@ -156,6 +156,34 @@ html.acc-highlight-links body :is(a, .link, [role="link"]) *:not(img):not(svg):n
     text-decoration: underline !important;
 }
 
+/* 4.1 COLLECTION & PRODUCT LIST HARD-TARGETS */
+html.acc-highlight-links body :is(
+  .collection-list .card__heading, 
+  .collection-list .card__information, 
+  .list-collections__item, 
+  .collection-hero__title, 
+  .card__heading,
+  .card-information__text,
+  .card__content,
+  .card-wrapper,
+  .product-card__title,
+  .collection-card__title,
+  [class*="card"] [class*="title"],
+  [class*="card"] [class*="heading"],
+  [class*="collection"] [class*="title"], 
+  [class*="collection"] [class*="heading"]
+) :is(a, span, h1, h2, h3, h4, h5, h6, p) {
+    color: var(--acc-gold) !important;
+    -webkit-text-fill-color: var(--acc-gold) !important;
+    text-decoration: underline !important;
+}
+
+/* Force red on any text that looks like a title inside a link-heavy container */
+html.acc-highlight-links body [class*="card"] :is(a, .link, [role="link"]) :is(h1, h2, h3, h4, h5, h6, span, p) {
+    color: var(--acc-gold) !important;
+    -webkit-text-fill-color: var(--acc-gold) !important;
+}
+
 /* 5. ALL FILTERS */
 html.acc-inverted { filter: invert(100%) hue-rotate(180deg) !important; }
 html.acc-low-contrast { filter: contrast(70%) brightness(120%) !important; }
