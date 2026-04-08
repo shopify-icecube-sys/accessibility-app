@@ -60,34 +60,68 @@ html.acc-highlight-links body button,
 html.acc-highlight-links body input[type="submit"],
 html.acc-highlight-links body input[type="button"],
 html.acc-highlight-links body .link,
-html.acc-highlight-links body [role="link"],
-html.acc-highlight-links body [class*="card"] h1,
-html.acc-highlight-links body [class*="card"] h2,
-html.acc-highlight-links body [class*="card"] h3,
-html.acc-highlight-links body [class*="card"] h4,
-html.acc-highlight-links body [class*="card"] h5,
-html.acc-highlight-links body [class*="card"] h6,
-html.acc-highlight-links body [class*="card"] span,
-html.acc-highlight-links body [class*="title"],
-html.acc-highlight-links body [class*="heading"] {
+html.acc-highlight-links body [role="link"] {
     color: var(--acc-gold) !important;
-    background-color: #ffff00 !important;
     text-decoration: underline !important;
+    font-weight: 700 !important;
     background-image: none !important;
     -webkit-text-fill-color: var(--acc-gold) !important;
-    padding: 0 4px !important;
+    padding: 0 !important;
+}
+
+html.acc-highlight-links body a[href]:not(:has(img)):not(:has(picture)):not(:has(video)):not(:has(canvas)):not(:has(svg)) {
+    background-color: transparent !important;
+}
+
+/* Never paint media/image link containers */
+html.acc-highlight-links body :is(
+  a:has(img),
+  a:has(picture),
+  a:has(video),
+  a:has(canvas),
+  a:has(svg),
+  [class*="image"] a,
+  [class*="media"] a,
+  .product__media a,
+  .card__media a,
+  [class*="media"],
+  [class*="image"],
+  [class*="gallery"],
+  [class*="thumbnail"],
+  [class*="slider"],
+  .product__media-wrapper,
+  .product__media-container,
+  .product-media-container,
+  .featured-media
+) {
+    background-color: transparent !important;
+    padding: 0 !important;
+    text-decoration: none !important;
+}
+
+html.acc-highlight-links body :is(
+  [class*="media"],
+  [class*="image"],
+  [class*="gallery"],
+  [class*="thumbnail"],
+  [class*="slider"],
+  .product__media-wrapper,
+  .product__media-container,
+  .product-media-container,
+  .featured-media
+) * {
+    background-color: transparent !important;
 }
 
 /* Force all text content within links to be yellow */
 html.acc-highlight-links body a *:not(img):not(svg):not(path),
 html.acc-highlight-links body button *:not(img):not(svg):not(path),
 html.acc-highlight-links body .link *:not(img):not(svg):not(path),
-html.acc-highlight-links body [role="link"] *:not(img):not(svg):not(path),
-html.acc-highlight-links body [class*="title"] *:not(img):not(svg):not(path),
-html.acc-highlight-links body [class*="heading"] *:not(img):not(svg):not(path) {
+html.acc-highlight-links body [role="link"] *:not(img):not(svg):not(path) {
     color: var(--acc-gold) !important;
     -webkit-text-fill-color: var(--acc-gold) !important;
     background-color: transparent !important;
+    font-weight: 700 !important;
 }
 
 /* Protect Icons and Images inside targeted elements from breaking */
@@ -105,6 +139,21 @@ html.acc-highlight-links body input {
     -webkit-text-fill-color: inherit !important;
     stroke: inherit !important;
     fill: inherit !important;
+}
+
+/* Final safety override: no yellow backgrounds in Links mode */
+html.acc-highlight-links body :is(a, button, .link, [role="link"], input[type="submit"], input[type="button"]),
+html.acc-highlight-links body :is(a, button, .link, [role="link"], input[type="submit"], input[type="button"]) * {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+html.acc-highlight-links body :is(a, .link, [role="link"]),
+html.acc-highlight-links body :is(a, .link, [role="link"]) *:not(img):not(svg):not(path) {
+    color: var(--acc-gold) !important;
+    -webkit-text-fill-color: var(--acc-gold) !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
 }
 
 /* 5. ALL FILTERS */
